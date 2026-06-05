@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours, Quiz & Atelier : Agent de Sécurité</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES CSS --- */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-light: #475569;
+            --border-color: #e2e8f0;
+        }
+
+        /* --- RESET & GLOBAL --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo { font-weight: 700; font-size: 1.25rem; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
+        .nav-actions { display: flex; gap: 1rem; }
+
+        /* --- BOUTONS --- */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .btn-primary { background-color: var(--primary-color); color: white; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn-secondary { background-color: white; color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background-color: #f1f5f9; border-color: var(--secondary-color); }
+        .btn-action { background-color: var(--text-main); color: white; }
+        .btn-action:hover { background-color: #0f172a; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-light); }
+        .btn-full { width: 100%; justify-content: center; margin-top: 20px; padding: 1rem; font-size: 1.1rem; }
+
+        /* --- VIEWS MANAGEMENT --- */
+        .view-section { display: none; padding-bottom: 4rem; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- CONTENU PRINCIPAL --- */
+        main { max-width: 900px; margin: 3rem auto; padding: 0 1.5rem; }
+        
+        /* --- STYLES DU COURS --- */
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text-main); letter-spacing: -0.02em; }
+        .subtitle { font-size: 1.25rem; color: var(--secondary-color); margin-bottom: 3rem; }
+        
+        section { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 2rem; 
+            margin-bottom: 2rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+            border: 1px solid var(--border-color); 
+        }
+        
+        h2 { 
+            font-size: 1.5rem; 
+            margin-bottom: 1.5rem; 
+            color: var(--primary-color); 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+        }
+        
+        h2::before { 
+            content: ''; 
+            display: block; 
+            width: 6px; 
+            height: 1.5rem; 
+            background-color: var(--primary-color); 
+            border-radius: 4px; 
+        }
+        
+        p { margin-bottom: 1rem; color: var(--text-light); }
+        ul { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-light); }
+        li { margin-bottom: 0.5rem; }
+
+        /* --- STYLES SPECIFIQUES AU COURS (Tableau, Comparaison) --- */
+        .star-table-container { overflow-x: auto; }
+        
+        table { width: 100%; border-collapse: collapse; text-align: left; border: 1px solid var(--border-color); margin: 1.5rem 0; }
+        thead { background: #f1f5f9; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+        th { font-weight: 700; color: var(--text-main); }
+        td:first-child { font-weight: 700; color: var(--primary-color); width: 15%; }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } }
+
+        .example-card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+        .example-bad { background: #fef2f2; border-color: var(--error-color); }
+        .example-good { background: #f0fdf4; border-color: var(--success-color); }
+
+        .example-title { font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+
+        .star-step { margin-top: 0.5rem; padding-left: 0.5rem; border-left: 2px solid rgba(0,0,0,0.1); }
+        .star-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; font-weight: 700; display: block; margin-bottom: 0.25rem; }
+
+        .summary-box {
+            background: #eff6ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #bfdbfe;
+            text-align: center;
+        }
+        .summary-box strong { color: var(--primary-color); }
+
+        /* --- STYLES DU QUIZ (Wizard Style) --- */
+        .quiz-intro-box { text-align: center; margin-bottom: 2rem; background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; border: 1px solid var(--border-color); }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        #progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .wizard-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option-btn {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 1rem;
+            color: var(--text-main);
+            position: relative;
+        }
+
+        .option-btn:hover:not(:disabled) { border-color: var(--primary-color); background-color: #f8fafc; }
+        .option-btn:disabled { cursor: default; opacity: 0.9; }
+
+        .option-btn.correct { background-color: #d1fae5; border-color: var(--success-color); color: #065f46; }
+        .option-btn.wrong { background-color: #fee2e2; border-color: var(--error-color); color: #991b1b; }
+
+        /* Feedback Box */
+        .feedback-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: none;
+            border-left: 5px solid;
+        }
+        .feedback-box.success { background-color: #ecfdf5; border-color: var(--success-color); color: #064e3b; }
+        .feedback-box.error { background-color: #fef2f2; border-color: var(--error-color); color: #991b1b; }
+
+        /* --- RÉSULTATS QUIZ --- */
+        #quiz-result-view { text-align: center; }
+        .score-circle {
+            width: 150px; height: 150px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+        .score-number { font-size: 3rem; font-weight: 800; line-height: 1; }
+        .score-label { font-size: 0.9rem; opacity: 0.9; }
+        
+        .result-details {
+            text-align: left;
+            margin-top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .detail-row { display: flex; flex-direction: column; border-bottom: 1px solid #eee; padding: 1rem 0; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-q { font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+        .detail-ans { font-size: 0.9rem; display: flex; gap: 1rem; }
+        .status-ok { color: var(--success-color); font-weight: 600; }
+        .status-ko { color: var(--error-color); font-weight: 600; }
+
+        /* --- STYLES DE L'ATELIER (WORKSHOP) --- */
+        .workshop-header { margin-bottom: 2rem; }
+        
+        .star-guide-box {
+            background: #eff6ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 2rem;
+        }
+        
+        .competence-block {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .competence-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .star-grid-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) { .star-grid-form { grid-template-columns: 1fr; } }
+
+        .input-group { display: flex; flex-direction: column; }
+
+        .input-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        textarea.form-input {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.2s;
+            background-color: #fff;
+        }
+
+        textarea.form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* --- TOAST --- */
+        .toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; bottom: 30px; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s, bottom 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        /* --- FOOTER --- */
+        footer { text-align: center; padding: 2rem; color: var(--secondary-color); font-size: 0.9rem; border-top: 1px solid var(--border-color); margin-top: auto; }
+
+        /* --- IMPRESSION (GÉNÉRAL & COURS) --- */
+        @media print {
+            header, .nav-actions, .toast, footer, #quiz-section, #workshop-section { display: none !important; }
+            body { background-color: white; color: black; font-size: 12pt; }
+            main { margin: 0; padding: 0; width: 100%; max-width: 100%; }
+            section { box-shadow: none; border: none; padding: 0; margin-bottom: 2rem; break-inside: avoid; }
+            h1 { font-size: 20pt; color: black; margin-bottom: 10pt; }
+            h2 { color: black; }
+            h2::before { display: none; }
+            .summary-box, .example-bad, .example-good { background-color: white !important; border: 1px solid #ccc !important; }
+            table { border: 1px solid #000; }
+            th, td { border: 1px solid #000; }
+        }
+
+        /* --- IMPRESSION (RÉSULTAT QUIZ) --- */
+        body.printing-quiz header, 
+        body.printing-quiz .nav-actions, 
+        body.printing-quiz #course-section, 
+        body.printing-quiz #quiz-intro-box,
+        body.printing-quiz #quiz-wizard,
+        body.printing-quiz #workshop-section,
+        body.printing-quiz .action-buttons {
+            display: none !important;
+        }
+        body.printing-quiz main { max-width: 100%; margin: 0; }
+        body.printing-quiz #quiz-result-view { display: block !important; padding-top: 2rem; }
+        body.printing-quiz .result-details { border: 2px solid #000; max-height: none; }
+
+        /* --- IMPRESSION (ATELIER) --- */
+        body.printing-workshop header, 
+        body.printing-workshop .nav-actions, 
+        body.printing-workshop #course-section, 
+        body.printing-workshop #quiz-section,
+        body.printing-workshop footer {
+            display: none !important;
+        }
+        body.printing-workshop body { background-color: white; color: black; font-size: 11pt; }
+        body.printing-workshop main { margin: 0; padding: 0; max-width: 100%; }
+        body.printing-workshop #workshop-section { display: block !important; }
+        body.printing-workshop .competence-block { box-shadow: none; border: 1px solid #000; padding: 10px; page-break-inside: avoid; }
+        body.printing-workshop .form-input { border: 1px solid #ccc; height: auto; resize: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <span>🛡️</span> Module Agent de Sécurité
+        </div>
+        <nav class="nav-actions">
+            <button id="btn-back-course" class="btn btn-secondary" style="display:none;" onclick="showCourse()">
+                <span>📚</span> Retour au cours
+            </button>
+            <button id="btn-show-quiz" class="btn btn-secondary" onclick="showQuizIntro()">
+                <span>❓</span> Quiz
+            </button>
+            <!-- Bouton modifié pour ouvrir l'atelier -->
+            <button id="btn-show-workshop" class="btn btn-action" onclick="showWorkshop()">
+                <span>✨</span> Créer mes exemples
+            </button>
+            <button id="btn-export-course" class="btn btn-primary" onclick="exportCoursePDF()">
+                <span>📄</span> Exporter en PDF
+            </button>
+        </nav>
+    </header>
+
+    <!-- VIEW 1: COURS -->
+    <main id="course-section" class="view-section active">
+        <h1>Pourquoi justifier une compétence par un exemple concret est indispensable</h1>
+        <p class="subtitle">Transformez vos affirmations en preuves tangibles pour convaincre les recruteurs.</p>
+
+        <!-- Point 1 -->
+        <section>
+            <h2>1. Parce qu’une compétence non illustrée n’est qu’une affirmation</h2>
+            <p>Dire « je suis organisé » ou « je sais gérer un conflit » n’a aucune valeur pour un recruteur. Tout le monde peut le dire. Ce que le recruteur cherche, c’est la preuve que tu l’as réellement mise en œuvre dans un contexte professionnel.</p>
+            <p><strong>Une compétence devient crédible uniquement lorsqu’elle est incarnée dans une situation réelle.</strong></p>
+        </section>
+
+        <!-- Point 2 -->
+        <section>
+            <h2>2. Parce que les recruteurs évaluent des comportements observables</h2>
+            <p>En RH, on ne recrute pas sur des intentions mais sur des <strong>comportements passés</strong>, car ils sont les meilleurs prédicteurs des comportements futurs.</p>
+            <p>Un exemple concret permet au recruteur de voir :</p>
+            <ul>
+                <li>Comment tu réfléchis</li>
+                <li>Comment tu agis</li>
+                <li>Comment tu réagis sous contrainte</li>
+                <li>Quel rôle tu joues dans une équipe</li>
+                <li>Quel niveau d’autonomie tu as</li>
+            </ul>
+            <p><strong>C’est ce qui permet de distinguer un candidat « théorique » d’un candidat « opérationnel ».</strong></p>
+        </section>
+
+        <!-- Point 3 -->
+        <section>
+            <h2>3. Parce que cela montre ton niveau de maturité professionnelle</h2>
+            <p>Être capable de décrire une situation de manière structurée, factuelle et concise montre :</p>
+            <ul>
+                <li>De la prise de recul</li>
+                <li>De la lucidité sur ses pratiques</li>
+                <li>De la capacité à analyser son travail</li>
+                <li>De la capacité à communiquer efficacement</li>
+            </ul>
+            <p>Ce sont des qualités très recherchées, quel que soit le métier.</p>
+        </section>
+
+        <!-- Méthode STAR -->
+        <section>
+            <h2>🧩 Comment justifier une compétence : la méthode STAR</h2>
+            <p>La méthode STAR est utilisée par les recruteurs… et doit être maîtrisée par les candidats.</p>
+            
+            <div class="star-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Élément</th>
+                            <th>Ce que tu racontes</th>
+                            <th>Ce que le recruteur évalue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>S – Situation</td>
+                            <td>Le contexte, le cadre</td>
+                            <td>Réalisme, complexité</td>
+                        </tr>
+                        <tr>
+                            <td>T – Tâche</td>
+                            <td>Ton rôle, ton objectif</td>
+                            <td>Niveau de responsabilité</td>
+                        </tr>
+                        <tr>
+                            <td>A – Action</td>
+                            <td>Ce que TU as fait</td>
+                            <td>Compétences réellement mobilisées</td>
+                        </tr>
+                        <tr>
+                            <td>R – Résultat</td>
+                            <td>Ce que ça a donné</td>
+                            <td>Impact, efficacité, valeur ajoutée</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Exemple Concret -->
+        <section>
+            <h2>🛠 Exemple concret : compétence « Gérer une situation conflictuelle »</h2>
+            
+            <div class="comparison-grid">
+                <!-- Mauvaise réponse -->
+                <div class="example-card example-bad">
+                    <div class="example-title">
+                        <span>❌</span> Mauvaise réponse (trop vague)
+                    </div>
+                    <p>« Je sais gérer les conflits, je suis quelqu’un de diplomate. »</p>
+                    <hr style="margin: 10px 0; border:0; border-top:1px solid #fca5a5;">
+                    <p style="font-size: 0.9rem;">→ Aucun recruteur ne peut évaluer ça.</p>
+                </div>
+
+                <!-- Bonne réponse -->
+                <div class="example-card example-good">
+                    <div class="example-title">
+                        <span>✅</span> Bonne réponse (méthode STAR)
+                    </div>
+                    
+                    <div class="star-step">
+                        <span class="star-title">Situation</span>
+                        <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">Lors de mon poste de coordinateur logistique, deux préparateurs se disputaient régulièrement sur la répartition des tâches, ce qui ralentissait la production.</p>
+                        
+                        <span class="star-title">Tâche</span>
+                        <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">En tant que référent d’équipe, je devais rétablir un fonctionnement serein et garantir le respect des délais.</p>
+                        
+                        <span class="star-title">Action</span>
+                        <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">J’ai organisé un entretien individuel avec chacun pour comprendre leurs frustrations, puis une réunion commune pour clarifier les règles de répartition, redéfinir les responsabilités et établir un mode de communication simple en cas de désaccord.</p>
+                        
+                        <span class="star-title">Résultat</span>
+                        <p style="font-size: 0.9rem;">Les tensions ont cessé en moins d’une semaine, la productivité du binôme a augmenté de 12 %, et le responsable d’entrepôt m’a confié la médiation sur d’autres équipes.</p>
+                    </div>
+                    <hr style="margin: 10px 0; border:0; border-top:1px solid #86efac;">
+                    <p style="font-size: 0.9rem;">→ Là, le recruteur voit, comprend, mesure la compétence.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pourquoi ça fonctionne -->
+        <section>
+            <h2>🧠 Pourquoi cette méthode fonctionne si bien</h2>
+            <ul>
+                <li>Elle transforme une compétence abstraite en preuve tangible.</li>
+                <li>Elle montre ton niveau réel (débutant, autonome, expert).</li>
+                <li>Elle permet au recruteur de se projeter : « Cette personne saura gérer la même situation chez nous. »</li>
+                <li>Elle évite les discours trop longs ou trop flous.</li>
+                <li>Elle met en valeur ton impact, ce que les recruteurs adorent.</li>
+            </ul>
+        </section>
+
+        <!-- Résumé -->
+        <section class="summary-box">
+            <h2>📌 En résumé</h2>
+            <p><strong>Une compétence non illustrée = non crédible.</strong></p>
+            <p><strong>Une compétence illustrée = prouvée, mémorisée, valorisée.</strong></p>
+            <br>
+            <p>Le recruteur retient toujours mieux :</p>
+            <ul style="display: inline-block; text-align: left; margin: 0 auto;">
+                <li>une histoire</li>
+                <li>un comportement</li>
+                <li>un résultat</li>
+            </ul>
+            <p style="margin-top: 1rem;">… qu’une simple liste de compétences.</p>
+        </section>
+    </main>
+
+    <!-- VIEW 2: QUIZ -->
+    <main id="quiz-section" class="view-section">
+        
+        <!-- Intro Quiz -->
+        <div id="quiz-intro-box">
+            <h1>Quiz Professionnel Agent de Sécurité</h1>
+            <p class="subtitle">30 questions pour évaluer vos compétences clés.</p>
+            
+            <!-- Consigne -->
+            <div style="margin-bottom: 2rem; padding: 1.5rem; background-color: #eff6ff; border-left: 5px solid var(--primary-color); border-radius: 4px; text-align: left; color: #1e40af;">
+                <strong>Consigne :</strong> Lisez attentivement chaque situation et identifiez la compétence professionnelle principale que l'agent doit mobiliser.
+            </div>
+
+            <div style="font-size: 1.1rem; color: var(--secondary-color); margin-bottom: 2rem;">
+                <span>⏱️ Durée estimée : 15 minutes</span> • <span>🎯 Passerelle : 50%</span>
+            </div>
+            <button class="btn btn-primary" style="margin-top: 1rem; padding: 1rem 2rem; font-size: 1.1rem;" onclick="startQuiz()">Commencer le Quiz</button>
+        </div>
+
+        <!-- Wizard Question Container -->
+        <div id="quiz-wizard" style="display: none;">
+            <div class="progress-bar"><div id="progress-fill"></div></div>
+            <div style="text-align: right; color: var(--secondary-color); margin-bottom: 1rem;">
+                Question <span id="current-q-num">1</span> / 30
+            </div>
+            
+            <div class="wizard-card">
+                <div id="question-text" class="question-text"></div>
+                <div id="options-container" class="options-grid"></div>
+            </div>
+
+            <div id="feedback" class="feedback-box"></div>
+            
+            <div class="action-buttons">
+                <button id="next-btn" class="btn btn-primary btn-full" style="display:none;">Passer à la question suivante</button>
+            </div>
+        </div>
+
+        <!-- Resultats -->
+        <div id="quiz-result-view" style="display: none;">
+            <div class="score-circle">
+                <span class="score-number" id="final-score-display">0</span>
+                <span class="score-label">/ 30</span>
+            </div>
+            
+            <h2 id="result-message">Résultat</h2>
+            <p id="result-comment" style="margin-bottom: 2rem; color: var(--text-light);"></p>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-success" onclick="printQuizResults()">
+                    <span>🖨️</span> Exporter le score (PDF)
+                </button>
+                <button class="btn btn-outline" onclick="resetQuiz()">
+                    <span>🔄</span> Recommencer
+                </button>
+            </div>
+
+            <div class="result-details">
+                <h3>Détail des réponses</h3>
+                <div id="result-details-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- VIEW 3: ATELIER (WORKSHOP) -->
+    <main id="workshop-section" class="view-section">
+        <div class="workshop-header">
+            <h1>Atelier : Illustrez vos compétences</h1>
+            <p class="subtitle">Utilisez la méthode STAR pour préparer vos exemples concrets.</p>
+        </div>
+        
+        <div class="star-guide-box">
+            <strong>Rappel de la Méthode STAR :</strong>
+            <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                <li><strong>S (Situation) :</strong> Posez le contexte (Où ? Quand ?).</li>
+                <li><strong>T (Tâche) :</strong> Quel était votre objectif ou le problème à régler ?</li>
+                <li><strong>A (Action) :</strong> Qu'avez-vous fait précisément ? (Détaillez vos gestes).</li>
+                <li><strong>R (Résultat) :</strong> Quel a été l'aboutissement ? (Succès, félicitations, calme rétabli).</li>
+            </ul>
+        </div>
+
+        <div id="competencesContainer"></div>
+        
+        <center>
+            <button type="button" class="btn btn-primary" onclick="printWorkshop()">Imprimer mes réponses / Sauvegarder en PDF</button>
+        </center>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Formation Recrutement & Compétences.</p>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Message notification</div>
+
+    <script>
+        // --- DONNÉES DU QUIZ (30 Questions) ---
+        // Structure adaptée pour le mélange dynamique des options
+        const quizData = [
+            // 1. Connaissance des rondes, accès, alarmes
+            { 
+                q: "Une alarme intrusion se déclenche à 3h du matin ; vous vérifiez sur place s'il s'agit d'une réelle effraction. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Connaissance des rondes, accès et alarmes", correct: true, ref: "C'est une procédure de levée de doute liée à la gestion des alarmes." },
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Capacité à agir sans panique", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Un prestataire se présente sans badge ; vous vérifiez son identité et la liste des autorisations avant de le laisser entrer. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Coordination avec l'équipe", correct: false, ref: "" },
+                    { text: "Communication", correct: false, ref: "" },
+                    { text: "Connaissance des rondes, accès et alarmes", correct: true, ref: "C'est l'application stricte du contrôle d'accès." },
+                    { text: "Respect des horaires", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Lors de votre ronde, vous utilisez un pointeur pour valider systématiquement chaque point stratégique du parcours. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Connaissance des rondes, accès et alarmes", correct: true, ref: "L'exécution d'un parcours de ronde prédéfini est une compétence de base." },
+                    { text: "Utilisation des systèmes techniques", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" },
+                    { text: "Tenue correcte", correct: false, ref: "" }
+                ]
+            },
+
+            // 2. Agir rapidement/efficacement
+            { 
+                q: "Un visiteur fait un malaise cardiaque ; vous utilisez immédiatement le défibrillateur et prodiguez les premiers secours. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Capacité à agir rapidement et efficacement en cas d’incident", correct: true, ref: "L'urgence vitale demande une action immédiate et efficace." },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" },
+                    { text: "Coordination fluide", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Une inondation est détectée ; vous coupez les vannes d'eau et l'électricité du secteur pour sécuriser la zone. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Capacité à agir rapidement et efficacement en cas d’incident", correct: true, ref: "Prendre des mesures conservatoires face à un sinistre est une action d'urgence." },
+                    { text: "Utilisation des systèmes techniques", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" },
+                    { text: "Savoir alerter", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Un début d'incendie se déclare ; vous saisissez l'extincteur approprié et commencez l'extinction tout en guidant l'évacuation. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Capacité à agir rapidement et efficacement en cas d’incident", correct: true, ref: "Il s'agit de maîtriser un incident dès son apparition." },
+                    { text: "Respect des procédures", correct: false, ref: "" },
+                    { text: "Coordination avec l'équipe", correct: false, ref: "" }
+                ]
+            },
+
+            // 3. Vigilance constante
+            { 
+                q: "Vous remarquez un individu qui filme les caméras de sécurité depuis le trottoir d'en face. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Savoir alerter", correct: false, ref: "" },
+                    { text: "Vigilance constante et détection des comportements suspects", correct: true, ref: "Repérer un repérage malveillant demande une observation active." },
+                    { text: "Utilisation de la vidéo", correct: false, ref: "" },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Lors de votre ronde, vous repérez un sac à dos abandonné sous un banc dans une zone très fréquentée. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Vigilance constante et détection des comportements suspects", correct: true, ref: "La détection d'objets délaissés relève de la vigilance." },
+                    { text: "Capacité à agir sans panique", correct: false, ref: "" },
+                    { text: "Connaissance des rondes", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous identifiez une personne qui tente de s'introduire en 'collant' un employé qui vient de badger à l'entrée. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Coordination d'équipe", correct: false, ref: "" },
+                    { text: "Communication", correct: false, ref: "" },
+                    { text: "Vigilance constante et détection des comportements suspects", correct: true, ref: "Le talonnage est un comportement suspect à détecter visuellement." },
+                    { text: "Respect des horaires", correct: false, ref: "" }
+                ]
+            },
+
+            // 4. Alerter, rédiger, dialoguer
+            { 
+                q: "Après un vol, vous appelez la police et fournissez une description calme et précise du suspect. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Capacité à agir sans panique", correct: false, ref: "" },
+                    { text: "Savoir alerter, rédiger des rapports et dialoguer", correct: true, ref: "L'alerte structurée est essentielle pour l'intervention des forces de l'ordre." },
+                    { text: "Rigueur et discipline", correct: false, ref: "" },
+                    { text: "Vigilance constante", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous rédigez un rapport circonstancié suite à une dégradation de matériel pour le dépôt de plainte du client. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Savoir alerter, rédiger des rapports et dialoguer", correct: true, ref: "La rédaction assure la traçabilité des événements." },
+                    { text: "Utilisation des systèmes techniques", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" },
+                    { text: "Coordination d'équipe", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous expliquez avec pédagogie et politesse les consignes de sécurité aux participants d'un événement. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Tenue correcte", correct: false, ref: "" },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" },
+                    { text: "Savoir alerter, rédiger des rapports et dialoguer", correct: true, ref: "Le dialogue avec le public est une compétence de communication." },
+                    { text: "Respect des horaires", correct: false, ref: "" }
+                ]
+            },
+
+            // 5. Discipline, rigueur, procédures
+            { 
+                q: "Vous refusez l'entrée à un employé connu dont le badge est périmé, malgré ses insistances. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Discipline, rigueur et application des procédures", correct: true, ref: "Appliquer la règle sans exception injustifiée définit la rigueur." },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" },
+                    { text: "Coordination fluide", correct: false, ref: "" },
+                    { text: "Tenue correcte", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous suivez scrupuleusement l'ordre de vérification des issues de secours lors de l'ouverture du site. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Discipline, rigueur et application des procédures", correct: true, ref: "Le respect méthodique des consignes est une marque de discipline." },
+                    { text: "Utilisation des systèmes techniques", correct: false, ref: "" },
+                    { text: "Coordination d'équipe", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous vous interdisez d'utiliser votre téléphone personnel durant votre temps de surveillance statique. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Respect des horaires", correct: false, ref: "" },
+                    { text: "Tenue correcte", correct: false, ref: "" },
+                    { text: "Discipline, rigueur et application des procédures", correct: true, ref: "L'autodiscipline au poste garantit la qualité du service." },
+                    { text: "Vigilance constante", correct: false, ref: "" }
+                ]
+            },
+
+            // 6. Systèmes techniques
+            { 
+                q: "Vous manipulez le joystick d'une caméra dôme pour suivre un véhicule suspect sur le parking. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Utilisation des systèmes techniques (vidéo, radios, main courante)", correct: true, ref: "La maîtrise des outils du PC Sécurité est une compétence technique." },
+                    { text: "Coordination fluide", correct: false, ref: "" },
+                    { text: "Savoir alerter", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous utilisez des codes radio courts et précis ('Reçu', 'Terminé') pour ne pas encombrer le réseau. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Utilisation des systèmes techniques (vidéo, radios, main courante)", correct: true, ref: "L'usage correct de la radio est une compétence technique." },
+                    { text: "Coordination fluide", correct: false, ref: "" },
+                    { text: "Communication", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous saisissez numériquement chaque événement de votre vacation sur le logiciel de main courante. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Utilisation des systèmes techniques (vidéo, radios, main courante)", correct: true, ref: "L'utilisation des logiciels métier est une compétence technique." },
+                    { text: "Savoir rédiger des rapports", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" },
+                    { text: "Respect des horaires", correct: false, ref: "" }
+                ]
+            },
+
+            // 7. Coordination équipe
+            { 
+                q: "Depuis le PC Sécurité, vous guidez par radio votre collègue sur le terrain vers une zone d'alarme. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Utilisation des systèmes techniques", correct: false, ref: "" },
+                    { text: "Coordination fluide avec l'équipe et les intervenants", correct: true, ref: "La coopération entre agents est vitale pour l'efficacité." },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous effectuez un passage de consignes complet à votre collègue lors de la relève. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Coordination fluide avec l'équipe et les intervenants", correct: true, ref: "La transmission d'infos assure la continuité de la sécurité." },
+                    { text: "Savoir rédiger des rapports", correct: false, ref: "" },
+                    { text: "Respect des horaires", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous accueillez les pompiers à l'entrée pour les guider immédiatement vers le sinistre. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Savoir alerter", correct: false, ref: "" },
+                    { text: "Coordination fluide avec l'équipe et les intervenants", correct: true, ref: "La coordination inclut les services de secours externes." },
+                    { text: "Connaissance des rondes", correct: false, ref: "" },
+                    { text: "Capacité à agir sans panique", correct: false, ref: "" }
+                ]
+            },
+
+            // 8. Tenue, posture, image
+            { 
+                q: "Vous restez debout à votre poste, mains visibles et buste droit, pour marquer votre présence. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Tenue correcte, posture et attitude professionnelle", correct: true, ref: "La posture physique a un effet dissuasif et professionnel." },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous portez votre uniforme complet, propre et repassé, avec votre badge bien en vue. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Respect des horaires", correct: false, ref: "" },
+                    { text: "Tenue correcte, posture et attitude professionnelle", correct: true, ref: "L'image de l'agent reflète le sérieux du client." },
+                    { text: "Discipline et rigueur", correct: false, ref: "" },
+                    { text: "Coordination d'équipe", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous saluez chaque collaborateur entrant sur le site avec courtoisie et professionnalisme. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Savoir dialoguer", correct: false, ref: "" },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" },
+                    { text: "Tenue correcte, posture et attitude professionnelle", correct: true, ref: "L'attitude respectueuse est un pilier de l'image professionnelle." },
+                    { text: "Coordination fluide", correct: false, ref: "" }
+                ]
+            },
+
+            // 9. Désamorcer tensions
+            { 
+                q: "Face à un individu mécontent de faire la queue, vous utilisez un ton de voix bas et calme pour l'apaiser. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Savoir alerter", correct: false, ref: "" },
+                    { text: "Savoir désamorcer les tensions et intervenir avec calme", correct: true, ref: "La communication verbale calme permet de réduire l'agressivité." },
+                    { text: "Tenue correcte", correct: false, ref: "" },
+                    { text: "Discipline et rigueur", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous intervenez dans un conflit en vous plaçant de profil pour ne pas paraître menaçant. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Tenue correcte", correct: false, ref: "" },
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Savoir désamorcer les tensions et intervenir avec calme", correct: true, ref: "La gestuelle non-verbale est un outil de désamorçage." },
+                    { text: "Capacité à agir sans panique", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous parvenez à convaincre une personne agitée de quitter les lieux par le dialogue sans utiliser la force. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Savoir désamorcer les tensions et intervenir avec calme", correct: true, ref: "La gestion pacifique des conflits évite l'escalade." },
+                    { text: "Capacité à agir rapidement", correct: false, ref: "" },
+                    { text: "Coordination d'équipe", correct: false, ref: "" },
+                    { text: "Savoir rédiger des rapports", correct: false, ref: "" }
+                ]
+            },
+
+            // 10. Horaires, fiabilité
+            { 
+                q: "Vous arrivez 15 minutes en avance pour prendre connaissance des consignes du jour. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Discipline et rigueur", correct: false, ref: "" },
+                    { text: "Respect des horaires, flexibilité et fiabilité", correct: true, ref: "L'anticipation est une preuve de fiabilité professionnelle." },
+                    { text: "Vigilance constante", correct: false, ref: "" },
+                    { text: "Coordination d'équipe", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous acceptez de rester une heure de plus car la relève est retardée par un accident de transport. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Flexibilité et fiabilité", correct: true, ref: "La flexibilité garantit que le site ne reste jamais sans surveillance." },
+                    { text: "Capacité à agir sans panique", correct: false, ref: "" },
+                    { text: "Coordination d'équipe", correct: false, ref: "" },
+                    { text: "Désamorçage des tensions", correct: false, ref: "" }
+                ]
+            },
+            { 
+                q: "Vous prévenez votre hiérarchie bien à l'avance d'un imprévu personnel pour ne pas bloquer le planning. Quelle compétence professionnelle doit être mobilisée pour cette situation ?", 
+                options: [
+                    { text: "Communication", correct: false, ref: "" },
+                    { text: "Respect des horaires, flexibilité et fiabilité", correct: true, ref: "La fiabilité permet une gestion saine des ressources humaines." },
+                    { text: "Discipline et rigueur", correct: false, ref: "" },
+                    { text: "Coordination fluide", correct: false, ref: "" }
+                ]
+            }
+        ];
+
+        // --- DONNÉES DE L'ATELIER (WORKSHOP) ---
+        const competences = [
+            "Connaissance des rondes, contrôles d’accès, levées de doute et gestion des alarmes",
+            "Capacité à agir rapidement et efficacement en cas d’incident",
+            "Vigilance constante et détection des comportements suspects",
+            "Savoir alerter, rédiger des rapports et dialoguer",
+            "Discipline, rigueur et application des procédures",
+            "Utilisation des systèmes techniques (vidéo, radios, main courante)",
+            "Coordination fluide avec l'équipe et les intervenants",
+            "Tenue correcte, posture et attitude professionnelle",
+            "Savoir désamorcer les tensions et intervenir avec calme",
+            "Respect des horaires, flexibilité et fiabilité"
+        ];
+
+        // --- VARIABLES GLOBALES QUIZ ---
+        let currentIdx = 0;
+        let score = 0;
+        let userAnswers = []; // Pour stocker { question, isCorrect, correctAnswer }
+
+        // --- INITIALISATION ATELIER ---
+        // Générer le formulaire au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('competencesContainer');
+            competences.forEach((comp, index) => {
+                const block = document.createElement('div');
+                block.className = 'competence-block';
+                block.innerHTML = `
+                    <div class="competence-title">${index + 1}. ${comp}</div>
+                    <div class="star-grid-form">
+                        <div class="input-group">
+                            <label class="input-label">Situation (Contexte)</label>
+                            <textarea class="form-input" placeholder="Ex: Lors d'une ronde de nuit dans l'entrepôt X..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Tâche (Objectif)</label>
+                            <textarea class="form-input" placeholder="Ex: Je devais vérifier l'origine d'un bruit suspect..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Action (Vos gestes)</label>
+                            <textarea class="form-input" placeholder="Ex: J'ai sécurisé la zone et alerté le PC par radio..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Résultat (Impact)</label>
+                            <textarea class="form-input" placeholder="Ex: L'intrusion a été évitée et le site sécurisé..."></textarea>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(block);
+            });
+        });
+
+        // --- NAVIGATION ---
+        function showCourse() {
+            document.getElementById('course-section').classList.add('active');
+            document.getElementById('quiz-section').classList.remove('active');
+            document.getElementById('workshop-section').classList.remove('active');
+            
+            document.getElementById('btn-back-course').style.display = 'none';
+            document.getElementById('btn-show-quiz').style.display = 'inline-flex';
+            document.getElementById('btn-show-workshop').style.display = 'inline-flex';
+            document.getElementById('btn-export-course').style.display = 'inline-flex';
+        }
+
+        function showQuizIntro() {
+            document.getElementById('course-section').classList.remove('active');
+            document.getElementById('quiz-section').classList.add('active');
+            document.getElementById('workshop-section').classList.remove('active');
+            
+            document.getElementById('quiz-intro-box').style.display = 'block';
+            document.getElementById('quiz-wizard').style.display = 'none';
+            document.getElementById('quiz-result-view').style.display = 'none';
+            
+            document.getElementById('btn-back-course').style.display = 'inline-flex';
+            document.getElementById('btn-show-quiz').style.display = 'none';
+            document.getElementById('btn-show-workshop').style.display = 'inline-flex';
+            document.getElementById('btn-export-course').style.display = 'none';
+        }
+
+        // Nouvelle fonction pour l'Atelier
+        function showWorkshop() {
+            document.getElementById('course-section').classList.remove('active');
+            document.getElementById('quiz-section').classList.remove('active');
+            document.getElementById('workshop-section').classList.add('active');
+            
+            document.getElementById('btn-back-course').style.display = 'inline-flex';
+            document.getElementById('btn-show-quiz').style.display = 'inline-flex';
+            document.getElementById('btn-show-workshop').style.display = 'none';
+            document.getElementById('btn-export-course').style.display = 'none';
+        }
+
+        function startQuiz() {
+            currentIdx = 0;
+            score = 0;
+            userAnswers = [];
+            document.getElementById('quiz-intro-box').style.display = 'none';
+            document.getElementById('quiz-wizard').style.display = 'block';
+            showQuestion();
+        }
+
+        // Mélanger un tableau (Fisher-Yates)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function updateProgress() {
+            const percent = ((currentIdx) / quizData.length) * 100;
+            document.getElementById("progress-fill").style.width = percent + "%";
+        }
+
+        function showQuestion() {
+            const data = quizData[currentIdx];
+            document.getElementById("current-q-num").textContent = currentIdx + 1;
+            document.getElementById("question-text").textContent = data.q;
+            
+            const container = document.getElementById("options-container");
+            container.innerHTML = "";
+            document.getElementById("feedback").style.display = "none";
+            document.getElementById("next-btn").style.display = "none";
+            
+            // Créer une copie des options pour ne pas modifier l'original
+            // et mélanger les réponses
+            const shuffledOptions = shuffleArray([...data.options]);
+
+            shuffledOptions.forEach((opt) => {
+                const b = document.createElement("button");
+                b.className = "option-btn";
+                b.textContent = opt.text;
+                // Stocker si c'est correct pour gérer le clic
+                b.dataset.isCorrect = opt.correct;
+                b.dataset.ref = opt.ref; // Stocker la référence
+                b.onclick = () => selectOption(b);
+                container.appendChild(b);
+            });
+            updateProgress();
+        }
+
+        function selectOption(btnElement) {
+            const buttons = document.querySelectorAll(".option-btn");
+            buttons.forEach(btn => btn.disabled = true);
+            
+            const isCorrect = btnElement.dataset.isCorrect === 'true';
+            const ref = btnElement.dataset.ref;
+
+            if(isCorrect) {
+                btnElement.classList.add("correct");
+                score++;
+                userAnswers.push({ 
+                    q: quizData[currentIdx].q, 
+                    correct: true, 
+                    userAns: btnElement.textContent,
+                    correctAns: btnElement.textContent
+                });
+            } else {
+                btnElement.classList.add("wrong");
+                // Trouver et afficher la bonne réponse
+                buttons.forEach(btn => {
+                    if(btn.dataset.isCorrect === 'true') {
+                        btn.classList.add("correct");
+                        userAnswers.push({ 
+                            q: quizData[currentIdx].q, 
+                            correct: false, 
+                            userAns: btnElement.textContent,
+                            correctAns: btn.textContent,
+                            ref: btn.dataset.ref
+                        });
+                    }
+                });
+            }
+
+            const feedback = document.getElementById("feedback");
+            feedback.style.display = "block";
+            feedback.className = "feedback-box " + (isCorrect ? "success" : "error");
+            
+            const correctText = isCorrect ? btnElement.textContent : userAnswers[userAnswers.length-1].correctAns;
+            const explanation = isCorrect ? "Bonne réponse !" : "Réponse incorrecte.";
+            
+            feedback.innerHTML = `
+                <strong>${explanation}</strong><br>
+                <span style="font-size: 0.9rem; margin-top: 5px; display: block; opacity: 0.9;">${ref || ""}</span>
+            `;
+            
+            document.getElementById("next-btn").style.display = "block";
+        }
+
+        document.getElementById("next-btn").onclick = () => {
+            currentIdx++;
+            if(currentIdx < quizData.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        function showResults() {
+            document.getElementById("quiz-wizard").style.display = "none";
+            document.getElementById("quiz-result-view").style.display = "block";
+            document.getElementById("final-score-display").textContent = score;
+            
+            let comment = "";
+            const percent = (score / quizData.length) * 100;
+            if(percent === 100) comment = "Parfait ! Vous maîtrisez toutes les compétences.";
+            else if(percent > 80) comment = "Excellent travail, vous êtes prêt pour le terrain.";
+            else if(percent > 50) comment = "Bon résultat, mais révisez encore certaines procédures.";
+            else comment = "Il est nécessaire de revoir les fondamentaux du métier.";
+            
+            document.getElementById("result-comment").textContent = comment;
+
+            // Générer la liste détaillée
+            const list = document.getElementById('result-details-list');
+            list.innerHTML = '';
+            
+            userAnswers.forEach((ans, i) => {
+                const row = document.createElement('div');
+                row.className = 'detail-row';
+                row.innerHTML = `
+                    <div class="detail-q">Q${i+1}: ${ans.q}</div>
+                    <div class="detail-ans">
+                        <span class="${ans.correct ? 'status-ok' : 'status-ko'}">
+                            ${ans.correct ? 'Correct' : 'Incorrect'}
+                        </span>
+                        ${!ans.correct ? `<span style="font-size:0.85rem; color:#666;">(Att.: ${ans.userAns})</span>` : ''}
+                    </div>
+                    ${!ans.correct && ans.ref ? `<div style="font-size:0.85rem; color:#666; margin-top:5px; font-style:italic;">Note: ${ans.ref}</div>` : ''}
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function resetQuiz() {
+            showQuizIntro();
+        }
+
+        // --- EXPORTS & IMPRESSIONS ---
+
+        function exportCoursePDF() {
+            // Impression standard du cours
+            window.print();
+        }
+
+        function printQuizResults() {
+            // Impression des résultats du quiz
+            document.body.classList.add('printing-quiz');
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('printing-quiz');
+            }, 1000);
+        }
+
+        function printWorkshop() {
+            // Impression de l'atelier
+            document.body.classList.add('printing-workshop');
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('printing-workshop');
+            }, 1000);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "toast show";
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
